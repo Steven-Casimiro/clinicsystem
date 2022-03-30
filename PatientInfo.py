@@ -65,8 +65,8 @@ class Patient:
 
         def PatientRec(event):
             global pt
-            searchPtnt = patientlist.curselection()[0]
-            pt = patientlist.get(searchPtnt)
+            searchPatient = patientlist.curselection() [0]
+            pt = patientlist.get(searchPatient)
 
             self.txtPtntID.delete(0, END)
             self.txtPtntID.insert(END, pt[1])
@@ -99,15 +99,12 @@ class Patient:
                 ClearData()
                 DisplayData()
 
-        def searchDatabase():
-            patientlist.delete(0, END)
-            for row in PtntDatabase.searchData(PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(),
-                                              Gender.get(), Address.get(), Mobile.get(),Allergies.get(),CM.get(),PM.get(),PS.get()):
-                patientlist.insert(END, row, str(""))
+        def searchPatient():
+            patientlist.delete(0,END)
+            for row in PtntDatabase.searchData(PtntID.get(),Firstname.get(),Surname.get(),DoB.get(),Age.get(), \
+                                               Gender.get(),Address.get(),Mobile.get(),Allergies.get(),CM.get(),PM.get(),PS.get()):
+                patientlist.insert(END,row,str(""))
 
-        # def update():
-        # if(len(StdID.get())!=0):
-        # StdDatabase.dataUpdate(sd[0],(StdID.get(), Firstname.get(),Surname.get(),DoB.get(), Age.get(),Gender.get(),Address.get(),Mobile.get()))
 
         def update():
             if (len(PtntID.get()) != 0):
@@ -228,7 +225,7 @@ class Patient:
         patientlist = Listbox(DataFrameRIGHT, width=41, height=16, font=('arial', 12, 'bold'),
                               yscrollcommand=scrollbar.set)
         patientlist.bind('<<ListboxSelect>>', PatientRec)
-        patientlist.grid(row=0, column=0, padx=8)
+        patientlist.grid(row=0, column=0, padx=12)
         scrollbar.config(command=patientlist.yview)
         # =========================================Buttons Widget=====================================================
         self.btnApplyID = Button(ButtonFrame, text='Apply ID', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
@@ -252,7 +249,7 @@ class Patient:
         self.btnDeleteData.grid(row=0, column=4)
 
         self.btnSearchData = Button(ButtonFrame, text='Search', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
-                                    command=searchDatabase)
+                                    command=searchPatient)
         self.btnSearchData.grid(row=0, column=5)
 
         self.btnUpdateData = Button(ButtonFrame, text='Update', font=('arial', 20, 'bold'), height=1, width=10, bd=4,

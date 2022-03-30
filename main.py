@@ -47,17 +47,13 @@ class mainpage:
                                  command = self.PatientReg_window)
         self.button_reg.grid(row = 0, column = 0, padx=10, pady=10)
 
-        self.button_App = Button(self.Loginframe3, text = "Appointment Registration", state = DISABLED, font = ("calibri",15,"bold"),
-                                 command = self.Appointment_window)
-        self.button_App.grid(row = 0, column = 1, padx=10, pady=10)
-
         self.button_Dent = Button(self.Loginframe3, text = "Calendar",state = DISABLED, font = ("calibri",15,"bold"),
                                  command = self.calendar)
-        self.button_Dent.grid(row = 1, column = 0, padx=10, pady=10)
+        self.button_Dent.grid(row = 1, column =0 , padx=10, pady=10)
 
         self.button_Pro = Button(self.Loginframe3, text = "Dentist Records",state = DISABLED, font = ("calibri",15,"bold"),
                                  command = self.Dentist_window)
-        self.button_Pro.grid(row = 1, column = 1, padx=10, pady=10)
+        self.button_Pro.grid(row = 0, column = 1, padx=10, pady=10)
 
         # ===================================================Username + Password Entry Fields============================================================
 
@@ -73,7 +69,7 @@ class mainpage:
         self.LabelPassword = Label(self.Loginframe1, text="Password", font=("calibri", 20, "bold"), bd=3)
         self.LabelPassword.grid(row=1, column=0)
 
-#===================================================Login,Exit,Reset Buttons============================================================
+#===================================================Login,Exit,Sign Up Buttons============================================================
         self.button_login = Button(self.Loginframe2, text = "Login", width = 20, font =("calibri",18,"bold"),
                                    command = self.login_verify)
         self.button_login.grid(row = 0,column =0, padx = 10, pady = 10)
@@ -81,10 +77,6 @@ class mainpage:
         self.button_sign_up = Button(self.Loginframe2, text = "Sign Up", width = 20, font =("calibri",18,"bold"),
                                    command = self.sign_up_window)
         self.button_sign_up.grid(row = 0,column =1, padx = 10, pady = 10)
-
-        self.button_reset = Button(self.Loginframe2, text = "Reset", width = 20, font =("calibri",18,"bold"),
-                                   command = self.reset_btn)
-        self.button_reset.grid(row = 0,column =2, padx = 10, pady = 10)
 
         self.button_exit = Button(self.Loginframe2, text = "Exit", width = 20, font =("calibri",18,"bold"),
                                    command = self.exit_btn)
@@ -107,21 +99,21 @@ class mainpage:
             verify = file1.read().splitlines()
             if password1 in verify:
                 self.button_reg.config(state=NORMAL)
-                self.button_App.config(state=NORMAL)
+                #self.button_App.config(state=NORMAL)
                 self.button_Dent.config(state=NORMAL)
                 self.button_Pro.config(state=NORMAL)
 
             else:
                 tkinter.messagebox.askyesno("Clinic Management System:", "Invalid Password")
                 self.button_reg.config(state=DISABLED)
-                self.button_App.config(state=DISABLED)
+                #self.button_App.config(state=DISABLED)
                 self.button_Dent.config(state=DISABLED)
                 self.button_Pro.config(state=DISABLED)
 
         else:
             tkinter.messagebox.askyesno("Clinic Management System:", "Invalid Username")
             self.button_reg.config(state=DISABLED)
-            self.button_App.config(state=DISABLED)
+            #self.button_App.config(state=DISABLED)
             self.button_Dent.config(state=DISABLED)
             self.button_Pro.config(state=DISABLED)
             #if user name or password is incorrect it will be disabled
@@ -131,16 +123,6 @@ class mainpage:
             self.txtUsername.focus()
 
 
-
-
-    def reset_btn(self):
-        self.button_reg.config(state=DISABLED)
-        self.button_App.config(state=DISABLED)
-        self.button_Dent.config(state=DISABLED)
-        self.button_Pro.config(state=DISABLED)
-        self.Username.set("")
-        self.Password.set("")
-        self.txtUsername.focus()
 
     def exit_btn(self):
         self.exit_btn = tkinter.messagebox.askyesno("Clinic Management System", "Are you sure you want to exit?")
@@ -153,10 +135,6 @@ class mainpage:
     def PatientReg_window(self):
         self.newWindow = Toplevel(self.master)
         self.app = Patient(self.newWindow)
-
-    def Appointment_window(self):
-        self.newWindow = Toplevel(self.master)
-        self.app = AppointmentRegistration(self.newWindow)
 
     def Dentist_window(self):
         self.newWindow = Toplevel(self.master)
@@ -257,13 +235,12 @@ class Patient:
 
         def addData():
             if (len(PtntID.get()) != 0):
-                PtntDatabase.addPatientRec(PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(),
-                                           Gender.get(),
-                                           Address.get(), Mobile.get(), Allergies.get(), CM.get(), PM.get(), PS.get())
+                PtntDatabase.addPatientRec(PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(), Gender.get(),
+                                      Address.get(), Mobile.get(), Allergies.get(), CM.get(), PM.get(), PS.get())
                 patientlist.delete(0, END)
                 patientlist.insert(END, (
-                    PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(), Gender.get(), Address.get(),
-                    Mobile.get()))
+                PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(), Gender.get(), Address.get(),
+                Mobile.get()))
 
         def DisplayData():
             patientlist.delete(0, END)
@@ -272,8 +249,8 @@ class Patient:
 
         def PatientRec(event):
             global pt
-            searchPtnt = patientlist.curselection()[0]
-            pt = patientlist.get(searchPtnt)
+            searchPatient = patientlist.curselection() [0]
+            pt = patientlist.get(searchPatient)
 
             self.txtPtntID.delete(0, END)
             self.txtPtntID.insert(END, pt[1])
@@ -306,42 +283,37 @@ class Patient:
                 ClearData()
                 DisplayData()
 
-        def searchDatabase():
-            patientlist.delete(0, END)
-            for row in PtntDatabase.searchData(PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(),
-                                               Gender.get(), Address.get(), Mobile.get(), Allergies.get(), CM.get(),
-                                               PM.get(), PS.get()):
-                patientlist.insert(END, row, str(""))
+        def searchPatient():
+            patientlist.delete(0,END)
+            for row in PtntDatabase.searchData(PtntID.get(),Firstname.get(),Surname.get(),DoB.get(),Age.get(), \
+                                               Gender.get(),Address.get(),Mobile.get(),Allergies.get(),CM.get(),PM.get(),PS.get()):
+                patientlist.insert(END,row,str(""))
 
-        # def update():
-        # if(len(StdID.get())!=0):
-        # StdDatabase.dataUpdate(sd[0],(StdID.get(), Firstname.get(),Surname.get(),DoB.get(), Age.get(),Gender.get(),Address.get(),Mobile.get()))
 
         def update():
             if (len(PtntID.get()) != 0):
                 PtntDatabase.deleteRec(pt[0])
             if (len(PtntID.get()) != 0):
-                PtntDatabase.addPatientRec(PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(),
-                                           Gender.get(),
-                                           Address.get(), Mobile.get(), Allergies.get(), CM.get(), PM.get(), PS.get())
+                PtntDatabase.addPatientRec(PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(), Gender.get(),
+                                      Address.get(), Mobile.get(),Allergies.get(),CM.get(),PM.get(),PS.get())
                 patientlist.delete(0, END)
                 patientlist.insert(END, (
-                    PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(), Gender.get(), Address.get(),
-                    Mobile.get(), Allergies.get(), CM.get(), PM.get(), PS.get()))
+                PtntID.get(), Firstname.get(), Surname.get(), DoB.get(), Age.get(), Gender.get(), Address.get(),
+                Mobile.get(),Allergies.get(),CM.get(),PM.get(),PS.get()))
 
         def PatientID_Number():
-            rannumber = random.randint(10000, 99999)
+            rannumber = random.randint(10000,99999)
             randomnumber = str(rannumber)
             PtntID.set(randomnumber)
 
-# =========================================Frame================================================================
-        MainFrame = Frame(self.root, bg="white")
+        # =========================================Frame================================================================
+        MainFrame = Frame(self.root, bg="bisque")
         MainFrame.grid()
 
         TitFrame = Frame(MainFrame, bd=2, padx=54, pady=8, bg="Ghost White", relief=RIDGE)
         TitFrame.pack(side=TOP)
 
-        self.lblTit = Label(TitFrame, font=('calibri', 47, 'bold'), text="Patient Database",
+        self.lblTit = Label(TitFrame, font=('arial', 47, 'bold'), text="Patient Database",
                             bg="Ghost White")
         self.lblTit.grid(sticky=W)
 
@@ -352,82 +324,82 @@ class Patient:
         DataFrame.pack(side=BOTTOM)
 
         DataFrameLEFT = LabelFrame(DataFrame, bd=1, width=1000, height=600, padx=20, relief=RIDGE
-                                   , font=('calibri', 20, 'bold'), text="Patient Info\n", bg="Ghost White")
+                                   , font=('arial', 20, 'bold'), text="Patient Info\n", bg="Ghost White")
         DataFrameLEFT.pack(side=LEFT)
 
         DataFrameRIGHT = LabelFrame(DataFrame, bd=1, width=450, height=300, padx=31, pady=3, relief=RIDGE
-                                    , font=('calibri', 20, 'bold'), bg="Ghost White")
+                                    , font=('arial', 20, 'bold'), bg="Ghost White")
         DataFrameRIGHT.pack(side=RIGHT)
         # =========================================Labels and Entrys===============================================
-        self.lblPtntID = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Patient ID:", padx=2, pady=2,
-                               bg="Ghost White")
+        self.lblPtntID = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Patient ID:", padx=2, pady=2,
+                              bg="Ghost White")
         self.lblPtntID.grid(row=0, column=0, sticky=W)
-        self.txtPtntID = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=PtntID, width=39)
+        self.txtPtntID = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=PtntID, width=39)
         self.txtPtntID.grid(row=0, column=1)
 
-        self.lblfna = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Firstname:", padx=2, pady=2,
+        self.lblfna = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Firstname:", padx=2, pady=2,
                             bg="Ghost White")
         self.lblfna.grid(row=1, column=0, sticky=W)
-        self.txtfna = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Firstname, width=39)
+        self.txtfna = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Firstname, width=39)
         self.txtfna.grid(row=1, column=1)
 
-        self.lblsna = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Surname:", padx=2, pady=2,
+        self.lblsna = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Surname:", padx=2, pady=2,
                             bg="Ghost White")
         self.lblsna.grid(row=2, column=0, sticky=W)
-        self.txtsna = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Surname, width=39)
+        self.txtsna = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Surname, width=39)
         self.txtsna.grid(row=2, column=1)
 
-        self.lblDoB = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Date of Birth:", padx=2, pady=3,
+        self.lblDoB = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Date of Birth:", padx=2, pady=3,
                             bg="Ghost White")
         self.lblDoB.grid(row=3, column=0, sticky=W)
-        self.txtDoB = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=DoB, width=39)
+        self.txtDoB = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=DoB, width=39)
         self.txtDoB.grid(row=3, column=1)
 
-        self.lblAge = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Age:", padx=2, pady=3, bg="Ghost White")
+        self.lblAge = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Age:", padx=2, pady=3, bg="Ghost White")
         self.lblAge.grid(row=4, column=0, sticky=W)
-        self.txtAge = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Age, width=39)
+        self.txtAge = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Age, width=39)
         self.txtAge.grid(row=4, column=1)
 
-        self.lblGender = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Gender:", padx=2, pady=3,
+        self.lblGender = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Gender:", padx=2, pady=3,
                                bg="Ghost White")
         self.lblGender.grid(row=5, column=0, sticky=W)
-        self.txtGender = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Gender, width=39)
+        self.txtGender = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Gender, width=39)
         self.txtGender.grid(row=5, column=1)
 
-        self.lblAdr = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Address:", padx=2, pady=3,
+        self.lblAdr = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Address:", padx=2, pady=3,
                             bg="Ghost White")
         self.lblAdr.grid(row=6, column=0, sticky=W)
-        self.txtAdr = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Address, width=39)
+        self.txtAdr = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Address, width=39)
         self.txtAdr.grid(row=6, column=1)
 
-        self.lblMobile = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Mobile :", padx=2, pady=3,
+        self.lblMobile = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Mobile :", padx=2, pady=3,
                                bg="Ghost White")
         self.lblMobile.grid(row=7, column=0, sticky=W)
-        self.txtMobile = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Mobile, width=39)
+        self.txtMobile = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Mobile, width=39)
         self.txtMobile.grid(row=7, column=1)
 
-        self.lblAll = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Allergies:", padx=2, pady=3,
-                            bg="Ghost White")
+        self.lblAll = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Allergies:", padx=2, pady=3,
+                               bg="Ghost White")
         self.lblAll.grid(row=8, column=0, sticky=W)
-        self.txtAll = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Allergies, width=39)
+        self.txtAll = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Allergies, width=39)
         self.txtAll.grid(row=8, column=1)
 
-        self.lblMC = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Current Medications:", padx=2, pady=3,
-                           bg="Ghost White")
+        self.lblMC = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Current Medications:", padx=2, pady=3,
+                               bg="Ghost White")
         self.lblMC.grid(row=9, column=0, sticky=W)
-        self.txtMC = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=CM, width=39)
+        self.txtMC = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=CM, width=39)
         self.txtMC.grid(row=9, column=1)
 
-        self.lblPM = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Past Medications:", padx=2, pady=3,
-                           bg="Ghost White")
+        self.lblPM = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Past Medications:", padx=2, pady=3,
+                               bg="Ghost White")
         self.lblPM.grid(row=10, column=0, sticky=W)
-        self.txtPM = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=PM, width=39)
+        self.txtPM = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=PM, width=39)
         self.txtPM.grid(row=10, column=1)
 
-        self.lblPS = Label(DataFrameLEFT, font=('calibri', 20, 'bold'), text="Past Surgeries:", padx=2, pady=3,
-                           bg="Ghost White")
+        self.lblPS = Label(DataFrameLEFT, font=('arial', 20, 'bold'), text="Past Surgeries:", padx=2, pady=3,
+                               bg="Ghost White")
         self.lblPS.grid(row=11, column=0, sticky=W)
-        self.txtPS = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=PS, width=39)
+        self.txtPS = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=PS, width=39)
         self.txtPS.grid(row=11, column=1)
         # =========================================Listbox and Scrollbar===============================================
 
@@ -437,265 +409,45 @@ class Patient:
         patientlist = Listbox(DataFrameRIGHT, width=41, height=16, font=('arial', 12, 'bold'),
                               yscrollcommand=scrollbar.set)
         patientlist.bind('<<ListboxSelect>>', PatientRec)
-        patientlist.grid(row=0, column=0, padx=8)
+        patientlist.grid(row=0, column=0, padx=12)
         scrollbar.config(command=patientlist.yview)
         # =========================================Buttons Widget=====================================================
-        self.btnApplyID = Button(ButtonFrame, text='Apply ID', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnApplyID = Button(ButtonFrame, text='Apply ID', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                  command=PatientID_Number)
         self.btnApplyID.grid(row=0, column=0)
 
-        self.btnAddData = Button(ButtonFrame, text='Add New', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnAddData = Button(ButtonFrame, text='Add New', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                  command=addData)
         self.btnAddData.grid(row=0, column=1)
 
-        self.btnDisplayData = Button(ButtonFrame, text='Display', font=('calibri', 20, 'bold'), height=1, width=10,
+        self.btnDisplayData = Button(ButtonFrame, text='Display', font=('arial', 20, 'bold'), height=1, width=10,
                                      bd=4, command=DisplayData)
         self.btnDisplayData.grid(row=0, column=2)
 
-        self.btnClearData = Button(ButtonFrame, text='Clear', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnClearData = Button(ButtonFrame, text='Clear', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                    command=ClearData)
         self.btnClearData.grid(row=0, column=3)
 
-        self.btnDeleteData = Button(ButtonFrame, text='Delete', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnDeleteData = Button(ButtonFrame, text='Delete', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                     command=DeleteDate)
         self.btnDeleteData.grid(row=0, column=4)
 
-        self.btnSearchData = Button(ButtonFrame, text='Search', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                    command=searchDatabase)
+        self.btnSearchData = Button(ButtonFrame, text='Search', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
+                                    command=searchPatient)
         self.btnSearchData.grid(row=0, column=5)
 
-        self.btnUpdateData = Button(ButtonFrame, text='Update', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnUpdateData = Button(ButtonFrame, text='Update', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                     command=update)
         self.btnUpdateData.grid(row=0, column=6)
 
-        self.btnExit = Button(ButtonFrame, text='Exit', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnExit = Button(ButtonFrame, text='Exit', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                               command=iExit)
         self.btnExit.grid(row=0, column=7)
 
 
-class AppointmentRegistration:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Appointment Registration")
-        self.root.geometry("1450x850+0+0")
-        self.root.config(bg="white")
-
-        Date_of_AppointmentReg = StringVar()
-        Date_of_AppointmentReg.set(time.strftime("%d/%m/%y"))
-        Appointment_ID = StringVar()
-        Station_Number = StringVar()
-        Patient_ID = StringVar()
-        Fee = StringVar()
-        Reason = StringVar()
-        Procedure = StringVar()
-
-        var1 = StringVar()
-
-        Appointment = StringVar()
-        Appointment.set("0")
-
-        # =========================================Function Declaration================================================
-
-        def iExitAppointment():
-            iExit = tkinter.messagebox.askyesno("Appointment Registration", "Confirm if you want to exit")
-            if iExit > 0:
-                root.destroy()
-                return
-
-        def ClearAppointmentData():
-            self.txtApptID.delete(0, END)
-            self.txtpat.delete(0, END)
-            self.txtsn.delete(0, END)
-            self.txtrsn.delete(0, END)
-            self.txtpname.delete(0, END)
-            self.txtfee.delete(0, END)
-            var1.set("0")
-            self.appt_paymetcmb.current(0)
-
-        def addAppointmentData():
-            if (len(Appointment_ID.get()) != 0):
-                PtntDatabase.addAppointmentRec(Appointment_ID.get(), Station_Number.get(), Patient_ID.get(), Fee.get(),
-                                               Reason.get(), Procedure.get(), var1.get())
-                appointmentlist.delete(0, END)
-                appointmentlist.insert(END, (
-                    Appointment_ID.get(), Station_Number.get(), Patient_ID.get(), Fee.get(), Reason.get(),
-                    Procedure.get(), var1.get()))
-
-        def DisplayAppointmentData():
-            appointmentlist.delete(0, END)
-            for row in PtntDatabase.viewAppointmentData():
-                appointmentlist.insert(END, row, str(""))
-
-        def AppointmentRec(event):
-            global at
-            searchAppt = appointmentlist.curselection()[0]
-            at = appointmentlist.get(searchAppt)
-
-            self.txtApptID.delete(0, END)
-            self.txtApptID.insert(END, at[1])
-            self.txtpat.delete(0, END)
-            self.txtpat.insert(END, at[2])
-            self.txtsn.delete(0, END)
-            self.txtsn.insert(END, at[3])
-            self.txtrsn.delete(0, END)
-            self.txtrsn.insert(END, at[4])
-            self.txtpname.delete(0, END)
-            self.txtpname.insert(END, at[5])
-            self.txtfee.delete(0, END)
-            self.txtfee.insert(END, at[6])
-            self.appt_paymetcmb.delete(0, END)
-            self.appt_paymetcmb.insert(END, at[7])
-
-        def DeleteAppointmentData():
-            if (len(Appointment_ID.get()) != 0):
-                PtntDatabase.deleteAppointmentRec(at[0])
-                ClearAppointmentData()
-                DisplayAppointmentData()
-
-        def searchDentistDatabase():
-            appointmentlist.delete(0, END)
-            for row in PtntDatabase.searchAppointmentData(Appointment_ID.get(), Station_Number.get(), Patient_ID.get(),
-                                                          Fee.get(), Reason.get(), Procedure.get(), var1.get()):
-                appointmentlist.insert(END, row, str(""))
-
-        def Dentistupdate():
-            if (len(Appointment_ID.get()) != 0):
-                PtntDatabase.deleteAppointmentRec(at[0])
-            if (len(Appointment_ID.get()) != 0):
-                PtntDatabase.addAppointmentRec(Appointment_ID.get(), Station_Number.get(), Patient_ID.get(), Fee.get(),
-                                               Reason.get(), Procedure.get(), var1.get())
-                appointmentlist.delete(0, END)
-                appointmentlist.insert(END, (
-                    Appointment_ID.get(), Station_Number.get(), Patient_ID.get(), Fee.get(), Reason.get(),
-                    Procedure.get(), var1.get()))
-
-        def DentistID_Random():
-            rannumber = random.randint(10000, 99999)
-            randomnumber = str(rannumber)
-            Appointment_ID.set(randomnumber)
-
-        # =========================================Frame================================================================
-        MainFrame = Frame(self.root, bg="white")
-        MainFrame.grid()
-
-        TitFrame = Frame(MainFrame, bd=2, padx=54, pady=8, bg="grey", relief=RIDGE)
-        TitFrame.pack(side=TOP)
-
-        self.lblTit = Label(TitFrame, font=('calibri', 47, 'bold'), text="Appointment Registration",
-                            bg="grey")
-        self.lblTit.grid(sticky=W)
-
-        ButtonFrame = Frame(MainFrame, bd=2, width=1350, height=70, padx=18, pady=10, bg="Ghost White", relief=RIDGE)
-        ButtonFrame.pack(side=BOTTOM)
-
-        DataFrame = Frame(MainFrame, bd=1, width=1300, height=400, padx=20, pady=20, relief=RIDGE, bg="white")
-        DataFrame.pack(side=BOTTOM)
-
-        DataFrameLEFT = LabelFrame(DataFrame, bd=1, width=1000, height=1000, padx=20, relief=RIDGE
-                                   , font=('calibri', 40, 'bold'), text="Appointment Details\n", bg="grey")
-        DataFrameLEFT.pack(side=LEFT)
-
-        DataFrameRIGHT = LabelFrame(DataFrame, bd=1, width=650, height=300, padx=31, pady=3, relief=RIDGE
-                                    , font=('calibri', 40, 'bold'), bg="Ghost White")
-        DataFrameRIGHT.pack(side=RIGHT)
-        # =========================================Labels and Entrys===============================================
-        self.lbldate = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Date:", padx=2, pady=2,
-                             bg="grey")
-        self.lbldate.grid(row=0, column=0, sticky=W)
-        self.txtdate = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Date_of_AppointmentReg, width=39)
-        self.txtdate.grid(row=0, column=1)
-
-        self.lblApptID = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Appointment ID:", padx=2, pady=2,
-                               bg="grey")
-        self.lblApptID.grid(row=1, column=0, sticky=W)
-        self.txtApptID = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Appointment_ID, width=39)
-        self.txtApptID.grid(row=1, column=1)
-
-        self.lblpat = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Patient ID:", padx=2, pady=2,
-                            bg="grey")
-        self.lblpat.grid(row=2, column=0, sticky=W)
-        self.txtpat = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Patient_ID, width=39)
-        self.txtpat.grid(row=2, column=1)
-
-        self.lblsn = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Station Number:", padx=2, pady=2,
-                           bg="grey")
-        self.lblsn.grid(row=3, column=0, sticky=W)
-        self.txtsn = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Station_Number, width=39)
-        self.txtsn.grid(row=3, column=1)
-
-        self.lblrsn = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Reason:", padx=2, pady=3,
-                            bg="grey")
-        self.lblrsn.grid(row=4, column=0, sticky=W)
-        self.txtrsn = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Reason, width=39)
-        self.txtrsn.grid(row=4, column=1)
-
-        self.lblpname = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Procedure Name:", padx=2, pady=3,
-                              bg="grey")
-        self.lblpname.grid(row=5, column=0, sticky=W)
-        self.txtpname = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Procedure, width=39)
-        self.txtpname.grid(row=5, column=1)
-
-        self.lblfee = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Fee:", padx=2, pady=3,
-                            bg="grey")
-        self.lblfee.grid(row=6, column=0, sticky=W)
-        self.txtfee = Entry(DataFrameLEFT, font=('calibri', 18, 'bold'), textvariable=Fee, width=39)
-        self.txtfee.grid(row=6, column=1)
-
-        self.lblappt_paymet = Label(DataFrameLEFT, font=('calibri', 18, 'bold'), text="Method of Payment:", padx=2,
-                                    pady=3,
-                                    bg="grey")
-        self.lblappt_paymet.grid(row=7, column=0, sticky=W)
-        self.appt_paymetcmb = ttk.Combobox(DataFrameLEFT, text=var1, state="readonly", font=("calibri", 18, "bold"),
-                                           width=29)
-        self.appt_paymetcmb['values'] = ("", "Debit", "Credit", "Cash")
-        self.appt_paymetcmb.current(0)
-        self.appt_paymetcmb.grid(row=7, column=1, pady=20, padx=10, sticky="w")
-
-        # =========================================Listbox and Scrollbar===============================================
-
-        scrollbar = Scrollbar(DataFrameRIGHT)
-        scrollbar.grid(row=0, column=1, sticky='ns')
-
-        appointmentlist = Listbox(DataFrameRIGHT, width=65, height=16, font=('calibri', 12, 'bold'),
-                                  yscrollcommand=scrollbar.set)
-        appointmentlist.bind('<<ListboxSelect>>', AppointmentRec)
-        appointmentlist.grid(row=0, column=0, padx=8)
-        scrollbar.config(command=appointmentlist.yview)
-        # =========================================Buttons=====================================================
-        self.btnApplyID = Button(ButtonFrame, text='Apply ID', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                 command=DentistID_Random, bg="grey")
-        self.btnApplyID.grid(row=0, column=0)
-
-        self.btnAddData = Button(ButtonFrame, text='Add New', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                 command=addAppointmentData, bg="grey")
-        self.btnAddData.grid(row=0, column=1)
-
-        self.btnDisplayData = Button(ButtonFrame, text='Display', font=('calibri', 20, 'bold'), height=1, width=10,
-                                     bd=4, command=DisplayAppointmentData, bg="grey")
-        self.btnDisplayData.grid(row=0, column=2)
-
-        self.btnClearData = Button(ButtonFrame, text='Clear', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                   command=ClearAppointmentData, bg="grey")
-        self.btnClearData.grid(row=0, column=3)
-
-        self.btnDeleteData = Button(ButtonFrame, text='Delete', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                    command=DeleteAppointmentData, bg="grey")
-        self.btnDeleteData.grid(row=0, column=4)
-
-        self.btnSearchData = Button(ButtonFrame, text='Search', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                    command=searchDentistDatabase, bg="grey")
-        self.btnSearchData.grid(row=0, column=5)
-
-        self.btnUpdateData = Button(ButtonFrame, text='Update', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                                    command=Dentistupdate, bg="grey")
-        self.btnUpdateData.grid(row=0, column=6)
-
-        self.btnExit = Button(ButtonFrame, text='Exit', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
-                              command=iExitAppointment, bg="grey")
-        self.btnExit.grid(row=0, column=7)
-
 
 class Dentist:
+
     def __init__(self, root):
         self.root = root
         self.root.title("Dentist Database")
@@ -789,7 +541,7 @@ class Dentist:
                 Mobile.get()))
 
         def DentistID_Random():
-            rannumber = random.randint(10000000, 99999999)
+            rannumber = random.randint(10000, 99999)
             randomnumber = str(rannumber)
             DentistID.set(randomnumber)
 
@@ -800,7 +552,7 @@ class Dentist:
         TitFrame = Frame(MainFrame, bd=2, padx=54, pady=8, bg="Ghost White", relief=RIDGE)
         TitFrame.pack(side=TOP)
 
-        self.lblTit = Label(TitFrame, font=('calibri', 47, 'bold'), text="Dentist Database",
+        self.lblTit = Label(TitFrame, font=('arial', 47, 'bold'), text="Dentist Database",
                             bg="Ghost White")
         self.lblTit.grid(sticky=W)
 
@@ -811,101 +563,105 @@ class Dentist:
         DataFrame.pack(side=BOTTOM)
 
         DataFrameLEFT = LabelFrame(DataFrame, bd=1, width=1000, height=1000, padx=20, relief=RIDGE
-                                   , font=('calibri', 30, 'bold'), text="Dentist Info\n", bg="Ghost White")
+                                   , font=('arial', 30, 'bold'), text="Dentist Info\n", bg="Ghost White")
         DataFrameLEFT.pack(side=LEFT)
 
         DataFrameRIGHT = LabelFrame(DataFrame, bd=1, width=650, height=300, padx=31, pady=3, relief=RIDGE
-                                    , font=('calibri', 20, 'bold'), bg="Ghost White")
+                                    , font=('arial', 20, 'bold'), bg="Ghost White")
         DataFrameRIGHT.pack(side=RIGHT)
         # =========================================Labels and Entrys===============================================
-        self.lblDentID = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Dentist ID:", padx=2, pady=2,
+        self.lblDentID = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Dentist ID:", padx=2, pady=2,
                               bg="Ghost White")
         self.lblDentID.grid(row=0, column=0, sticky=W)
-        self.txtDentID = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=DentistID, width=39)
+        self.txtDentID = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=DentistID, width=39)
         self.txtDentID.grid(row=0, column=1)
 
-        self.lblfna = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Firstname:", padx=2, pady=2,
+        self.lblfna = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Firstname:", padx=2, pady=2,
                             bg="Ghost White")
         self.lblfna.grid(row=1, column=0, sticky=W)
-        self.txtfna = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Firstname, width=39)
+        self.txtfna = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Firstname, width=39)
         self.txtfna.grid(row=1, column=1)
 
-        self.lblsna = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Surname:", padx=2, pady=2,
+        self.lblsna = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Surname:", padx=2, pady=2,
                             bg="Ghost White")
         self.lblsna.grid(row=2, column=0, sticky=W)
-        self.txtsna = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Surname, width=39)
+        self.txtsna = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Surname, width=39)
         self.txtsna.grid(row=2, column=1)
 
-        self.lblDoB = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Date of Birth:", padx=2, pady=3,
+        self.lblDoB = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Date of Birth:", padx=2, pady=3,
                             bg="Ghost White")
         self.lblDoB.grid(row=3, column=0, sticky=W)
-        self.txtDoB = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=DoB, width=39)
+        self.txtDoB = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=DoB, width=39)
         self.txtDoB.grid(row=3, column=1)
 
-        self.lblAge = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Age:", padx=2, pady=3, bg="Ghost White")
+        self.lblAge = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Age:", padx=2, pady=3, bg="Ghost White")
         self.lblAge.grid(row=4, column=0, sticky=W)
-        self.txtAge = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Age, width=39)
+        self.txtAge = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Age, width=39)
         self.txtAge.grid(row=4, column=1)
 
-        self.lblGender = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Gender:", padx=2, pady=3,
+        self.lblGender = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Gender:", padx=2, pady=3,
                                bg="Ghost White")
         self.lblGender.grid(row=5, column=0, sticky=W)
-        self.txtGender = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Gender, width=39)
+        self.txtGender = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Gender, width=39)
         self.txtGender.grid(row=5, column=1)
 
-        self.lblAdr = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Address:", padx=2, pady=3,
+        self.lblAdr = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Address:", padx=2, pady=3,
                             bg="Ghost White")
         self.lblAdr.grid(row=6, column=0, sticky=W)
-        self.txtAdr = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Address, width=39)
+        self.txtAdr = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Address, width=39)
         self.txtAdr.grid(row=6, column=1)
 
-        self.lblMobile = Label(DataFrameLEFT, font=('calibri', 25, 'bold'), text="Mobile :", padx=2, pady=3,
+        self.lblMobile = Label(DataFrameLEFT, font=('arial', 25, 'bold'), text="Mobile :", padx=2, pady=3,
                                bg="Ghost White")
         self.lblMobile.grid(row=7, column=0, sticky=W)
-        self.txtMobile = Entry(DataFrameLEFT, font=('calibri', 20, 'bold'), textvariable=Mobile, width=39)
+        self.txtMobile = Entry(DataFrameLEFT, font=('arial', 20, 'bold'), textvariable=Mobile, width=39)
         self.txtMobile.grid(row=7, column=1)
         # =========================================Listbox and Scrollbar===============================================
 
         scrollbar = Scrollbar(DataFrameRIGHT)
         scrollbar.grid(row=0, column=1, sticky='ns')
 
-        dentistlist = Listbox(DataFrameRIGHT, width=65, height=16, font=('calibri', 12, 'bold'),
+        dentistlist = Listbox(DataFrameRIGHT, width=65, height=16, font=('arial', 12, 'bold'),
                               yscrollcommand=scrollbar.set)
         dentistlist.bind('<<ListboxSelect>>', DentistRec)
         dentistlist.grid(row=0, column=0, padx=8)
         scrollbar.config(command=dentistlist.yview)
         # =========================================Buttons=====================================================
-        self.btnApplyID = Button(ButtonFrame, text='Apply ID', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnApplyID = Button(ButtonFrame, text='Apply ID', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                  command=DentistID_Random)
         self.btnApplyID.grid(row=0, column=0)
 
-        self.btnAddData = Button(ButtonFrame, text='Add New', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnAddData = Button(ButtonFrame, text='Add New', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                  command=addDentistData)
         self.btnAddData.grid(row=0, column=1)
 
-        self.btnDisplayData = Button(ButtonFrame, text='Display', font=('calibri', 20, 'bold'), height=1, width=10,
+        self.btnDisplayData = Button(ButtonFrame, text='Display', font=('arial', 20, 'bold'), height=1, width=10,
                                      bd=4, command=DisplayDentistData)
         self.btnDisplayData.grid(row=0, column=2)
 
-        self.btnClearData = Button(ButtonFrame, text='Clear', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnClearData = Button(ButtonFrame, text='Clear', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                    command=ClearDentistData)
         self.btnClearData.grid(row=0, column=3)
 
-        self.btnDeleteData = Button(ButtonFrame, text='Delete', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnDeleteData = Button(ButtonFrame, text='Delete', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                     command=DeleteDentistData)
         self.btnDeleteData.grid(row=0, column=4)
 
-        self.btnSearchData = Button(ButtonFrame, text='Search', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnSearchData = Button(ButtonFrame, text='Search', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                     command=searchDentistDatabase)
         self.btnSearchData.grid(row=0, column=5)
 
-        self.btnUpdateData = Button(ButtonFrame, text='Update', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnUpdateData = Button(ButtonFrame, text='Update', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                                     command=Dentistupdate)
         self.btnUpdateData.grid(row=0, column=6)
 
-        self.btnExit = Button(ButtonFrame, text='Exit', font=('calibri', 20, 'bold'), height=1, width=10, bd=4,
+        self.btnExit = Button(ButtonFrame, text='Exit', font=('arial', 20, 'bold'), height=1, width=10, bd=4,
                               command=iExitDentist)
         self.btnExit.grid(row=0, column=7)
+
+
+
+
 
 
 class calendar:

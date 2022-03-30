@@ -15,5 +15,12 @@
       <jdbc-url>jdbc:sqlite:C:\Users\steve\PycharmProjects\TheOne\students.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="clinic [2]" uuid="cb01ed6d-72bc-4b6e-b3a2-76bbd51cb0a3">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\steve\PycharmProjects\clinicsystem\clinic.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

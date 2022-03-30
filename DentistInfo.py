@@ -99,7 +99,7 @@ class Dentist:
                 Mobile.get()))
 
         def DentistID_Random():
-            rannumber = random.randint(10000000, 99999999)
+            rannumber = random.randint(10000, 99999)
             randomnumber = str(rannumber)
             DentistID.set(randomnumber)
 
